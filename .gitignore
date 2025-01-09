@@ -1,0 +1,7 @@
+# Ignore Python bytecode
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignore IDE/editor settings
+.idea/
