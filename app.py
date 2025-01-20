@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
-import preporcessor  # Assuming this is your module containing the preprocess function
-import helper      # file that will be containing various functions necessary for analysis
+import preporcessor
+import helper
 
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS to allow requests from your frontend
+CORS(app)
 
 df = None  # globally define df so that it can be used until the session is over
 
@@ -13,7 +13,6 @@ df = None  # globally define df so that it can be used until the session is over
 @app.route('/upload', methods=['POST'])
 def upload_file():
     global df  # declaring it global so that it can be modified
-    # Check if a file is part of the request
     if 'file' not in request.files:
         return jsonify({"error": "No file part in the request"}), 400
 

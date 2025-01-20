@@ -69,7 +69,6 @@ def top_used_words(df, selected_user):
     df = df[df["message"] != "<Media omitted>\n"]
     words = []
     for message in df['message']:
-        # Clean the message (convert to lowercase, remove punctuation)
         cleaned_message = re.sub(r'[^a-zA-Z0-9\s]', '', message.lower())
         words.extend(cleaned_message.split())
     word_count = Counter(words)
@@ -96,12 +95,21 @@ def most_used_emojis(df, selected_user):
 def monthly_timeline(df, selected_user):
     if selected_user != "Overall":
         df = df[df["user"] == selected_user]
-    timeline = df.groupby(["year", "month_name"]).count()["message"].reset_index()
-    time = []
+
+    month_order = {
+        "January": 1, "February": 2, "March": 3, "April": 4,
+        "May": 5, "June": 6, "July": 7, "August": 8,
+        "September": 9, "October": 10, "November": 11, "December": 12
+    }
+    df = df.copy()
+    df["month_num"] = df["month_name"].map(month_order)
+    timeline = df.groupby(["year", "month_name", "month_num"]).count()["message"].reset_index()
+    timeline = timeline.sort_values(by=["year", "month_num"])
+    new_timeline = []
     for i in range(timeline.shape[0]):
-        time.append(timeline["month_name"][i] + "-" + str(timeline["year"][i]))
-    new_timeline=[]
-    for i in range(timeline.shape[0]):
-        new_timeline.append([time[0], timeline["message"][i].tolist()])
+        month_year = timeline.iloc[i]["month_name"] + "-" + str(timeline.iloc[i]["year"])
+        message_count = int(timeline.iloc[i]["message"])
+        new_timeline.append([month_year, message_count])
 
     return new_timeline
+

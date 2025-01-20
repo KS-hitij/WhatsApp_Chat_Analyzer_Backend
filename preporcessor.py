@@ -8,7 +8,7 @@ def preprocess(data):
     dates = re.findall(pattern, data)  # filters date and time and stores it in dates
     # will clean the dates and remove unncessary things
     dates = [date.replace('\u202f', ' ').replace(' - ', '').replace('/', '-').replace(',', '') for date in dates]
-    min_length = min(len(messages),len(dates))  # since length of dates is one more than messages we will truncate the shorter one
+    min_length = min(len(messages), len(dates))  # since length of dates is one more than messages we will truncate the shorter one
     messages = messages[:min_length]
     dates = dates[:min_length]
     df = pd.DataFrame({"user_message": messages, "dates": dates})  # store messages and user under user_message column
